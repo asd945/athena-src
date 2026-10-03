@@ -2,13 +2,32 @@
 
 Encrypted delivery bundle for the Athena knowledge-base source stack.
 
-## Contents
+This repository uses ordinary Git objects only. Git LFS is not required.
 
-The repository tracks one Git LFS object:
+## Fetch
+
+Clone or fetch normally:
+
+```sh
+git clone git@github.com:asd945/athena-src.git
+cd athena-src
+```
+
+The encrypted archive is stored as fifteen ordered chunks under `chunks/`.
+Each chunk is smaller than GitHub's 100 MB per-file limit. Reassemble and
+verify the encrypted archive:
+
+```sh
+bash reassemble.sh
+```
+
+This creates:
 
 ```text
 athena-src-20261003.tar.gz.enc
 ```
+
+## Archive Contents
 
 After decryption, the archive contains:
 
@@ -19,13 +38,7 @@ After decryption, the archive contains:
 
 ## Decrypt
 
-The passphrase is not committed. Retrieve it from the local protected file:
-
-```text
-~/workspace/athena-src/.secrets/athena-src-passphrase.txt
-```
-
-Decrypt and extract:
+The passphrase is not committed. After reassembly, decrypt with:
 
 ```sh
 openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 \
@@ -36,10 +49,12 @@ openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 \
 tar -xzf athena-src-20261003.tar.gz
 ```
 
-Verify the restored compressed archive before extraction:
+The passphrase is delivered separately by the repository owner. Verify the
+reassembled encrypted archive independently:
 
 ```sh
 shasum -a 256 -c SHA256SUMS
+(cd chunks && shasum -a 256 -c SHA256SUMS)
 ```
 
 The expanded archive includes additional per-file and image-part checksums

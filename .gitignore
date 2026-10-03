@@ -3,3 +3,4 @@
 .planning/
 .secrets/
 *.tar.gz
+*.tar.gz.enc
