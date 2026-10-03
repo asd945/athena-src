@@ -1,0 +1,5 @@
+.DS_Store
+.build/
+.planning/
+.secrets/
+*.tar.gz
