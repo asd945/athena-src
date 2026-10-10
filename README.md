@@ -13,7 +13,7 @@ git clone git@github.com:asd945/athena-src.git
 cd athena-src
 ```
 
-The encrypted archive is stored as fifteen ordered chunks under `chunks/`.
+The encrypted archive is stored as sixteen ordered chunks under `chunks/`.
 Each chunk is smaller than GitHub's 100 MB per-file limit. Reassemble and
 verify the encrypted archive:
 
@@ -24,17 +24,18 @@ bash reassemble.sh
 This creates:
 
 ```text
-athena-src-20261003.tar.gz.enc
+athena-src-20261010.tar.gz.enc
 ```
 
 ## Archive Contents
 
 After decryption, the archive contains:
 
-- source snapshots for `codegraph`, `forge`, and `athena`
-- the `athena-workbench:local` `linux/amd64` image artifact
+- source snapshots for `forge` (latest `868fd3d`), `athena` (`8a81a80`), and `codegraph` (`af4cf8d` build/ artifacts only)
+- the `athena-workbench:local` `linux/amd64` image artifact (under `images/athena-workbench/`)
+- base dependency images (under `images/base/`, including `python-3.12-slim-linux-amd64.tar`)
 - quality-harness deployment, architecture, and usage documentation
-- source provenance, per-file SHA-256 inventories, and image build metadata
+- source provenance, per-file SHA-256 inventories, and image build metadata under `manifests/`
 
 ## Decrypt
 
@@ -42,11 +43,11 @@ The passphrase is not committed. After reassembly, decrypt with:
 
 ```sh
 openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 \
-  -in athena-src-20261003.tar.gz.enc \
-  -out athena-src-20261003.tar.gz \
+  -in athena-src-20261010.tar.gz.enc \
+  -out athena-src-20261010.tar.gz \
   -pass file:/path/to/athena-src-passphrase.txt
 
-tar -xzf athena-src-20261003.tar.gz
+tar -xzf athena-src-20261010.tar.gz
 ```
 
 The passphrase is delivered separately by the repository owner. Verify the
